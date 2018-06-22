@@ -13,6 +13,8 @@ public class Gun : MonoBehaviour {
 
     public GameObject impactEffect;
 
+    public GameObject impactEffectStone;
+
 
 
     // Update is called once per frame
@@ -40,8 +42,39 @@ public class Gun : MonoBehaviour {
 
             }
 
-            GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(impactGO, 2f);
+            bool playDefaultImpactEffect = false;
+
+            ObjectProperties properties = hit.transform.GetComponent<ObjectProperties>();
+            if (properties != null)
+            {
+                //if (properties.materialType == MaterialType.Stone)
+                //{
+                //    GameObject impactGO = Instantiate(impactEffectStone, hit.point, Quaternion.LookRotation(hit.normal));
+                //    Destroy(impactGO, 2f);
+                //}
+
+                if (properties.impactEffect != null)
+                {
+                    GameObject impactGO = Instantiate(properties.impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(impactGO, 2f);
+                }
+                else
+                {
+                    playDefaultImpactEffect = true;
+                }
+            }
+            else
+            {
+                playDefaultImpactEffect = true;
+            }
+
+            if (playDefaultImpactEffect == true)
+            {
+                // Play a default impact.
+            }
+
+            //GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            //Destroy(impactGO, 2f);
         }
     }
 }
